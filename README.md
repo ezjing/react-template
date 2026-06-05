@@ -32,11 +32,11 @@
 
 ## 이 템플릿으로 할 수 있는 것
 
-| 목적 | 설명 |
-|------|------|
+| 목적          | 설명                                                               |
+| ------------- | ------------------------------------------------------------------ |
 | **빠른 시작** | 매번 CRA부터 설정하지 않고, 라우팅·상태·폴더 규칙이 잡힌 채로 시작 |
-| **구조 통일** | 화면·기능·공통 UI가 항상 같은 위치에 있어 팀원이 파일을 찾기 쉬움 |
-| **규칙 공유** | ESLint 설정, Cursor Rule로 AI·린터가 같은 스타일을 따름 |
+| **구조 통일** | 화면·기능·공통 UI가 항상 같은 위치에 있어 팀원이 파일을 찾기 쉬움  |
+| **규칙 공유** | ESLint 설정, Cursor Rule로 AI·린터가 같은 스타일을 따름            |
 
 ---
 
@@ -57,55 +57,55 @@
 
 ### Step 1 — 빌드
 
-| 항목 | 선택 |
-|------|------|
+| 항목      | 선택                                               |
+| --------- | -------------------------------------------------- |
 | 빌드 도구 | Create React App (`react-scripts`) — **이미 적용** |
-| SSR | **적용하지 않음** (CRA는 클라이언트 렌더링 중심) |
+| SSR       | **적용하지 않음** (CRA는 클라이언트 렌더링 중심)   |
 
 ### Step 2 — 앱 골격
 
-| 항목 | 역할 |
-|------|------|
-| **React Router** | URL에 따라 다른 화면(페이지) 표시 |
+| 항목                             | 역할                                           |
+| -------------------------------- | ---------------------------------------------- |
+| **React Router**                 | URL에 따라 다른 화면(페이지) 표시              |
 | **TanStack Query (React Query)** | 서버 API 데이터, 로딩/에러 표시, 캐시, refetch |
-| **React.lazy** | 화면별 코드 분할 — 처음에 필요한 JS만 로드 |
-| **SSR** | 미적용 |
+| **React.lazy**                   | 화면별 코드 분할 — 처음에 필요한 JS만 로드     |
+| **SSR**                          | 미적용                                         |
 
 ### Step 3 — 클라이언트 전역 상태
 
-| 항목 | Redux에 둘 것 |
-|------|----------------|
-| **Redux Toolkit** | 로그인한 사용자 정보 |
-| | UI 전역 (사이드바 열림/닫힘, 테마) |
-| | 여러 화면이 **동시에** 써야 하는 클라이언트 상태 |
+| 항목              | Redux에 둘 것                                    |
+| ----------------- | ------------------------------------------------ |
+| **Redux Toolkit** | 로그인한 사용자 정보                             |
+|                   | UI 전역 (사이드바 열림/닫힘, 테마)               |
+|                   | 여러 화면이 **동시에** 써야 하는 클라이언트 상태 |
 
 서버에서 받아온 목록·상세 데이터는 **React Query**에 둡니다. ([상태 관리](#상태-관리-redux-vs-react-query) 참고)
 
 ### Step 4 — 스타일
 
-| 항목 | 규칙 |
-|------|------|
-| **Tailwind CSS** | 유틸리티 클래스 기반 스타일 |
-| **아이콘** | Heroicons / Lucide 등 라이브러리 사용, **`shared/config/icons.js`에서만** import |
-| **색상** | Tailwind `theme` 확장, **`shared/config/colors.js`에서만** 정의 |
-| **폰트** | **`shared/config/fonts.js`** + `tailwind.config.js` 연동 |
+| 항목             | 규칙                                                                             |
+| ---------------- | -------------------------------------------------------------------------------- |
+| **Tailwind CSS** | 유틸리티 클래스 기반 스타일                                                      |
+| **아이콘**       | Heroicons / Lucide 등 라이브러리 사용, **`shared/config/icons.js`에서만** import |
+| **색상**         | Tailwind `theme` 확장, **`shared/config/colors.js`에서만** 정의                  |
+| **폰트**         | **`shared/config/fonts.js`** + `tailwind.config.js` 연동                         |
 
 > Tailwind는 **아이콘 세트를 제공하지 않습니다**. “아이콘은 Tailwind에서”가 아니라 **아이콘 라이브러리 + 중앙 관리 파일**을 의미합니다.
 
 ### Step 5 — UI · 폴더
 
-| 항목 | 내용 |
-|------|------|
+| 항목              | 내용                                                            |
+| ----------------- | --------------------------------------------------------------- |
 | **기초 컴포넌트** | Input, Textarea, Select, Dialog, Bottom Sheet 등 → `shared/ui/` |
-| **폴더 구조** | FSD (아래 [상세 설명](#fsd란--처음-보는-분을-위한-상세-설명)) |
+| **폴더 구조**     | FSD (아래 [상세 설명](#fsd란--처음-보는-분을-위한-상세-설명))   |
 
 ### Step 6 — 개발 규칙
 
-| 항목 | 내용 |
-|------|------|
-| **ESLint** | `.eslintrc` 등 **설정 파일을 저장소에 포함** — 새 프로젝트에 그대로 복사 |
-| **Prettier** | (권장) ESLint와 함께 포맷 통일 |
-| **Cursor Rules** | `.cursor/rules` — FSD, 네이밍, Query/Redux 역할을 AI에게 안내 |
+| 항목             | 내용                                                                     |
+| ---------------- | ------------------------------------------------------------------------ |
+| **ESLint**       | `.eslintrc` 등 **설정 파일을 저장소에 포함** — 새 프로젝트에 그대로 복사 |
+| **Prettier**     | (권장) ESLint와 함께 포맷 통일                                           |
+| **Cursor Rules** | `.cursor/rules` — FSD, 네이밍, Query/Redux 역할을 AI에게 안내            |
 
 ---
 
@@ -113,11 +113,11 @@
 
 코딩을 모르셔도 아래 표만 기억하시면 됩니다.
 
-| 데이터 종류 | 예시 | 어디에? |
-|-------------|------|---------|
-| **서버 데이터** | 회원 목록, 게시글, API 조회 결과 | **React Query** |
-| **화면에만 잠깐 쓰는 UI** | 모달 열림, 입력 중인 검색어 | 컴포넌트 안 `useState` |
-| **앱 전체가 공유** | 로그인 사용자, 다크모드, 사이드바 | **Redux** |
+| 데이터 종류               | 예시                              | 어디에?                |
+| ------------------------- | --------------------------------- | ---------------------- |
+| **서버 데이터**           | 회원 목록, 게시글, API 조회 결과  | **React Query**        |
+| **화면에만 잠깐 쓰는 UI** | 모달 열림, 입력 중인 검색어       | 컴포넌트 안 `useState` |
+| **앱 전체가 공유**        | 로그인 사용자, 다크모드, 사이드바 | **Redux**              |
 
 **왜 나누나요?**  
 서버 데이터는 “가져오기·캐시·다시 불러오기”가 React Query에 맞고, 로그인 사용자처럼 **여러 화면이 같은 값을 봐야 할 때** Redux가 맞습니다.
@@ -128,12 +128,12 @@
 
 이 템플릿은 **화면단**과 **기능단**을 나누고, 함수 이름 규칙을 통일합니다.
 
-| 구분 | 의미 | 폴더 위치 | 파일 예시 |
-|------|------|-----------|-----------|
-| **화면** | 사용자가 보는 한 페이지 전체 | `pages/<이름>/ui/` | `SampleListPage.jsx` |
-| **기능(로직)** | 조회·저장·버튼 처리 등 동작 | `features/<이름>/model/` | `SampleListF.js` |
-| **조회 로직** | 목록/상세 검색 | `*F.js` 안 | `SearchLogic1`, `SearchLogic2`, … |
-| **저장 로직** | 등록·수정·삭제 | `*F.js` 안 | `SaveLogic1`, `SaveLogic2`, … |
+| 구분           | 의미                         | 폴더 위치                | 파일 예시                         |
+| -------------- | ---------------------------- | ------------------------ | --------------------------------- |
+| **화면**       | 사용자가 보는 한 페이지 전체 | `pages/<이름>/ui/`       | `SampleListPage.jsx`              |
+| **기능(로직)** | 조회·저장·버튼 처리 등 동작  | `features/<이름>/model/` | `SampleListF.js`                  |
+| **조회 로직**  | 목록/상세 검색               | `*F.js` 안               | `SearchLogic1`, `SearchLogic2`, … |
+| **저장 로직**  | 등록·수정·삭제               | `*F.js` 안               | `SaveLogic1`, `SaveLogic2`, …     |
 
 **함수 이름**: 파스칼 케이스 (예: `SearchLogic1`, `SaveLogic1`)
 
@@ -170,14 +170,14 @@
 
 FSD는 건물을 **층(레이어)** 으로 나눕니다.
 
-| 층 이름 | 비유 | 하는 일 |
-|---------|------|---------|
-| **app** | 건물 로비·전기·엘리베이터 | 앱 전체 설정: 라우터, Redux, React Query Provider |
-| **pages** | “로그인 층”, “목록 층” | **주소(URL) 하나 = 화면 하나** |
-| **widgets** | 로비에 있는 큰 안내 데스크 | 여러 기능을 **묶은 큰 UI** (전체 레이아웃, 사이드바+헤더) |
-| **features** | 각 부서 창구 | **사용자 행동** 단위 (로그인하기, 목록 조회하기) |
-| **entities** | 회사 공통 명함·직원 카드 | **업무 데이터 단위** (사용자, 상품) — 여러 창구가 공유 |
-| **shared** | 공용 복사기·도장·A4용지 | **어떤 프로젝트에나 쓸 수 있는** 버튼, 색상, API 클라이언트 |
+| 층 이름      | 비유                       | 하는 일                                                     |
+| ------------ | -------------------------- | ----------------------------------------------------------- |
+| **app**      | 건물 로비·전기·엘리베이터  | 앱 전체 설정: 라우터, Redux, React Query Provider           |
+| **pages**    | “로그인 층”, “목록 층”     | **주소(URL) 하나 = 화면 하나**                              |
+| **widgets**  | 로비에 있는 큰 안내 데스크 | 여러 기능을 **묶은 큰 UI** (전체 레이아웃, 사이드바+헤더)   |
+| **features** | 각 부서 창구               | **사용자 행동** 단위 (로그인하기, 목록 조회하기)            |
+| **entities** | 회사 공통 명함·직원 카드   | **업무 데이터 단위** (사용자, 상품) — 여러 창구가 공유      |
+| **shared**   | 공용 복사기·도장·A4용지    | **어떤 프로젝트에나 쓸 수 있는** 버튼, 색상, API 클라이언트 |
 
 **중요한 규칙**: 위층(앱·페이지)은 아래층(shared)을 **가져다 쓸 수** 있지만, 아래층이 위층을 가져다 쓰면 **안 됩니다**. (엘리베이터가 로비 전기를 쓰는 것은 OK, 복사기가 “3층 회의실 전용 코드”를 알면 안 됨)
 
@@ -204,12 +204,12 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 
 각 서랍 안은 다시 **역할별 칸**으로 나눕니다.
 
-| 칸 이름 | 들어가는 것 | 비유 |
-|---------|-------------|------|
-| **ui** | 화면에 보이는 버튼·표·폼 | 창구 앞에 보이는 키오스크 |
-| **model** | 상태, 훅, `SearchLogic1` 같은 로직 | 창구 뒤에서 일하는 직원 |
-| **api** | 서버 주소 호출, fetch/axios | 창구와 본사를 연결하는 전화 |
-| **lib** | (선택) 이 기능만 쓰는 계산·포맷 | 창구 전용 계산기 |
+| 칸 이름   | 들어가는 것                        | 비유                        |
+| --------- | ---------------------------------- | --------------------------- |
+| **ui**    | 화면에 보이는 버튼·표·폼           | 창구 앞에 보이는 키오스크   |
+| **model** | 상태, 훅, `SearchLogic1` 같은 로직 | 창구 뒤에서 일하는 직원     |
+| **api**   | 서버 주소 호출, fetch/axios        | 창구와 본사를 연결하는 전화 |
+| **lib**   | (선택) 이 기능만 쓰는 계산·포맷    | 창구 전용 계산기            |
 
 **팀 규칙과 연결**
 
@@ -309,11 +309,11 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 
 ### FSD를 지키지 않으면 생기는 일
 
-| 잘못된 예 | 결과 |
-|-----------|------|
-| `shared`에서 `pages/login` import | 공용 복사기가 “로그인 층 전용 코드”에 묶임 → 재사용 불가 |
-| `features/A`가 `features/B` 직접 import | 창구끼리 엮임 → B 수정 시 A도 수정 |
-| 모든 코드를 `pages` 한곳에 | 화면이 커질수록 파일 수천 줄, 신규 인원 온보딩 어려움 |
+| 잘못된 예                               | 결과                                                     |
+| --------------------------------------- | -------------------------------------------------------- |
+| `shared`에서 `pages/login` import       | 공용 복사기가 “로그인 층 전용 코드”에 묶임 → 재사용 불가 |
+| `features/A`가 `features/B` 직접 import | 창구끼리 엮임 → B 수정 시 A도 수정                       |
+| 모든 코드를 `pages` 한곳에              | 화면이 커질수록 파일 수천 줄, 신규 인원 온보딩 어려움    |
 
 템플릿에서는 **ESLint `import/no-restricted-paths`** 로 위 규칙을 자동 검사하는 것을 권장합니다.
 
@@ -504,12 +504,12 @@ src/
 
 ## 파일 확장자 규칙
 
-| 종류 | 확장자 | 예 |
-|------|--------|-----|
-| React 화면·컴포넌트 (JSX 있음) | `.jsx` | `HomePage.jsx`, `Button.jsx` |
-| 로직·API·slice·설정 | `.js` | `SampleListF.js`, `authSlice.js` |
-| 전역 스타일 | `.css` | `globals.css` |
-| 테스트 | `.test.js` / `.test.jsx` | `Button.test.jsx` |
+| 종류                           | 확장자                   | 예                               |
+| ------------------------------ | ------------------------ | -------------------------------- |
+| React 화면·컴포넌트 (JSX 있음) | `.jsx`                   | `HomePage.jsx`, `Button.jsx`     |
+| 로직·API·slice·설정            | `.js`                    | `SampleListF.js`, `authSlice.js` |
+| 전역 스타일                    | `.css`                   | `globals.css`                    |
+| 테스트                         | `.test.js` / `.test.jsx` | `Button.test.jsx`                |
 
 ---
 
@@ -547,14 +547,14 @@ import { useSampleListPage } from '@/features/sample-list';
 
 ## import 규칙 — 폴더 간 연결 규칙
 
-| 내 레이어 | import 가능한 레이어 |
-|-----------|----------------------|
-| `app` | pages, widgets, features, entities, shared |
-| `pages` | widgets, features, entities, shared |
-| `widgets` | features, entities, shared |
-| `features` | entities, shared |
-| `entities` | shared |
-| `shared` | **shared만** |
+| 내 레이어  | import 가능한 레이어                       |
+| ---------- | ------------------------------------------ |
+| `app`      | pages, widgets, features, entities, shared |
+| `pages`    | widgets, features, entities, shared        |
+| `widgets`  | features, entities, shared                 |
+| `features` | entities, shared                           |
+| `entities` | shared                                     |
+| `shared`   | **shared만**                               |
 
 **금지**
 
@@ -570,17 +570,17 @@ import { useSampleListPage } from '@/features/sample-list';
 
 ### 1단계 — 페이지(화면) 만들기
 
-1. `src/pages/sample-list/ui/SampleListPage.jsx` 생성  
-2. `src/pages/sample-list/index.js`에서 export  
-3. `app/router/routes.jsx`에 경로 등록  
-4. 필요 시 `app/router/lazyPages.js`에 `React.lazy` 등록  
+1. `src/pages/sample-list/ui/SampleListPage.jsx` 생성
+2. `src/pages/sample-list/index.js`에서 export
+3. `app/router/routes.jsx`에 경로 등록
+4. 필요 시 `app/router/lazyPages.js`에 `React.lazy` 등록
 
 ### 2단계 — 기능(로직·UI) 만들기
 
-1. `src/features/sample-list/model/SampleListF.js` — `SearchLogic1`, `SaveLogic1`  
-2. `src/features/sample-list/api/sampleListApi.js` — HTTP  
-3. `src/features/sample-list/ui/SampleListTable.jsx` — 표/버튼  
-4. `src/features/sample-list/index.js` — public export  
+1. `src/features/sample-list/model/SampleListF.js` — `SearchLogic1`, `SaveLogic1`
+2. `src/features/sample-list/api/sampleListApi.js` — HTTP
+3. `src/features/sample-list/ui/SampleListTable.jsx` — 표/버튼
+4. `src/features/sample-list/index.js` — public export
 
 ### 3단계 — 페이지에서 조립
 
@@ -594,12 +594,12 @@ import { useSampleListPage } from '@/features/sample-list';
 
 ## 스타일 · 아이콘 · 색상 · 폰트
 
-| 항목 | 파일 | 규칙 |
-|------|------|------|
-| 색상 | `shared/config/colors.js` | `tailwind.config.js`의 `theme.extend.colors`에서 import |
-| 폰트 | `shared/config/fonts.js` | 동일하게 theme 연동 |
-| 아이콘 | `shared/config/icons.js` | Lucide/Heroicons 등을 여기서만 re-export |
-| UI 컴포넌트 | `shared/ui/*` | Input, Dialog 등 — 비즈니스 문구는 `features` 쪽에서 |
+| 항목        | 파일                      | 규칙                                                    |
+| ----------- | ------------------------- | ------------------------------------------------------- |
+| 색상        | `shared/config/colors.js` | `tailwind.config.js`의 `theme.extend.colors`에서 import |
+| 폰트        | `shared/config/fonts.js`  | 동일하게 theme 연동                                     |
+| 아이콘      | `shared/config/icons.js`  | Lucide/Heroicons 등을 여기서만 re-export                |
+| UI 컴포넌트 | `shared/ui/*`             | Input, Dialog 등 — 비즈니스 문구는 `features` 쪽에서    |
 
 컴포넌트 파일 안에서 아이콘·색상 hex를 **직접 하드코딩하지 않습니다.**
 
@@ -607,10 +607,10 @@ import { useSampleListPage } from '@/features/sample-list';
 
 ## 개발 규칙 (ESLint · Cursor)
 
-| 도구 | 목적 |
-|------|------|
-| **ESLint** | 문법·import 규칙·실수 방지 — 설정 파일을 repo에 포함해 새 프로젝트에 복사 |
-| **Prettier** | 들여쓰기·따옴표 통일 (권장) |
+| 도구                               | 목적                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------ |
+| **ESLint**                         | 문법·import 규칙·실수 방지 — 설정 파일을 repo에 포함해 새 프로젝트에 복사      |
+| **Prettier**                       | 들여쓰기·따옴표 통일 (권장)                                                    |
 | **Cursor Rules** (`.cursor/rules`) | FSD 레이어, `SearchLogicN` / `SaveLogicN`, 화면·기능 분리, Query vs Redux 안내 |
 
 ---
@@ -619,27 +619,27 @@ import { useSampleListPage } from '@/features/sample-list';
 
 프로젝트 루트에서:
 
-| 명령어 | 설명 |
-|--------|------|
-| `npm start` | 개발 서버 — [http://localhost:3000](http://localhost:3000) |
-| `npm test` | 테스트 (watch 모드) |
-| `npm run build` | 프로덕션 빌드 → `build/` 폴더 |
-| `npm run eject` | CRA 설정 추출 (**되돌릴 수 없음**, 가급적 사용 안 함) |
+| 명령어          | 설명                                                       |
+| --------------- | ---------------------------------------------------------- |
+| `npm start`     | 개발 서버 — [http://localhost:3000](http://localhost:3000) |
+| `npm test`      | 테스트 (watch 모드)                                        |
+| `npm run build` | 프로덕션 빌드 → `build/` 폴더                              |
+| `npm run eject` | CRA 설정 추출 (**되돌릴 수 없음**, 가급적 사용 안 함)      |
 
 ---
 
 ## 참고 링크
 
-| 주제 | URL |
-|------|-----|
-| Create React App | https://github.com/facebook/create-react-app |
+| 주제                  | URL                                                     |
+| --------------------- | ------------------------------------------------------- |
+| Create React App      | https://github.com/facebook/create-react-app            |
 | Feature-Sliced Design | https://feature-sliced.design/docs/get-started/overview |
-| FSD (블로그) | https://wonderfulwonder.tistory.com/110 |
-| React 폴더 구조 | https://joong-sunny.github.io/react/react7/ |
-| React Router | https://reactrouter.com/ |
-| TanStack Query | https://tanstack.com/query/latest |
-| Redux Toolkit | https://redux-toolkit.js.org/ |
-| Tailwind CSS | https://tailwindcss.com/docs |
+| FSD (블로그)          | https://wonderfulwonder.tistory.com/110                 |
+| React 폴더 구조       | https://joong-sunny.github.io/react/react7/             |
+| React Router          | https://reactrouter.com/                                |
+| TanStack Query        | https://tanstack.com/query/latest                       |
+| Redux Toolkit         | https://redux-toolkit.js.org/                           |
+| Tailwind CSS          | https://tailwindcss.com/docs                            |
 
 ---
 
@@ -647,10 +647,10 @@ import { useSampleListPage } from '@/features/sample-list';
 
 FSD 구조로 옮길 때 제거·대체 대상:
 
-| 제거/대체 | 대신 |
-|-----------|------|
-| `src/App.js`, `App.css`, `logo.svg` | `app/App.jsx`, `app/styles/globals.css` |
-| `src/index.js` | `AppProviders`로 감싼 뒤 `app/App.jsx` 마운트 |
+| 제거/대체                           | 대신                                          |
+| ----------------------------------- | --------------------------------------------- |
+| `src/App.js`, `App.css`, `logo.svg` | `app/App.jsx`, `app/styles/globals.css`       |
+| `src/index.js`                      | `AppProviders`로 감싼 뒤 `app/App.jsx` 마운트 |
 
 ---
 

@@ -15,17 +15,11 @@
 
 export const FONT_FAMILY = {
   /** 본문 — 시스템 폰트 스택 */
-  sans: [
-    "-apple-system",
-    "BlinkMacSystemFont",
-    "'Segoe UI'",
-    "Roboto",
-    "sans-serif",
-  ],
+  sans: ['-apple-system', 'BlinkMacSystemFont', "'Segoe UI'", 'Roboto', 'sans-serif'],
   /** 코드 */
-  mono: ["source-code-pro", "Menlo", "Monaco", "Consolas", "monospace"],
+  mono: ['source-code-pro', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
   /** 제목/디스플레이 — 웹폰트 (Pretendard) */
-  display: ["'Pretendard'", "sans-serif"],
+  display: ["'Pretendard'", 'sans-serif'],
 };
 
 /**
@@ -41,8 +35,8 @@ export const FONT_FAMILY = {
  */
 export const FONT_META = {
   display: {
-    name: "Pretendard",
-    url: "https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/static/pretendard.css",
+    name: 'Pretendard',
+    url: 'https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/static/pretendard.css',
   },
 };
 

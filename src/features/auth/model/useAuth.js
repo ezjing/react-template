@@ -1,7 +1,7 @@
-import { useAppSelector } from '@/app/store/hooks';
+import { useSelector } from 'react-redux';
 
 export function useAuth() {
-  const user = useAppSelector((state) => state.auth.user);
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return { user, isAuthenticated };
 }

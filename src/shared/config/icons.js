@@ -14,7 +14,6 @@
  * }
  */
 
-import React from 'react';
 import {
   Home,
   LogIn,
@@ -34,6 +33,7 @@ import {
   Settings,
   Bell,
 } from 'lucide-react';
+import React from 'react';
 
 export const ICON_TYPES = {
   home: Home,

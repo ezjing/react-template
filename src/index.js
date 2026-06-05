@@ -1,11 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "@/app/styles/globals.css";
-import App from "@/app/App";
-import { AppProviders } from "@/app/providers";
-import reportWebVitals from "./reportWebVitals";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+import '@/app/styles/globals.css';
+import App from '@/app/App';
+import { AppProviders } from '@/app/providers';
+
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AppProviders>
