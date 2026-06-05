@@ -1,4 +1,4 @@
-import client from '../../../shared/api/client';
+import client from '@/shared/api/client';
 
 export const sampleListApi = {
   getList: (params) => client.get('/samples', { params }),
