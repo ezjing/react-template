@@ -1,0 +1,76 @@
+---
+description: 상태 관리 — React Query vs Redux 역할 구분
+globs: src/**/*.{js,jsx}
+alwaysApply: false
+---
+
+# 상태 관리 규칙
+
+## 어디에 둘지 기준
+
+| 데이터 종류                | 예시                              | 저장 위치           |
+| -------------------------- | --------------------------------- | ------------------- |
+| 서버에서 받아온 데이터     | 회원 목록, 게시글, API 결과       | **React Query**     |
+| 화면에만 잠깐 쓰는 UI 상태 | 모달 열림, 검색어 입력            | 컴포넌트 `useState` |
+| 앱 전체가 공유하는 상태    | 로그인 사용자, 다크모드, 사이드바 | **Redux**           |
+
+## React Query — 서버 데이터
+
+```js
+// ✅ entities 또는 features 의 model/ 에 위치
+// src/entities/member/model/useMemberQuery.js
+import { useQuery } from '@tanstack/react-query';
+import { memberApi } from '../api/memberApi';
+import { QUERY_KEYS } from '@/shared/constants/queryKeys';
+
+export function useMemberQuery(id) {
+  return useQuery({
+    queryKey: QUERY_KEYS.member(id),
+    queryFn: () => memberApi.getById(id),
+    enabled: !!id,
+  });
+}
+```
+
+```js
+// ✅ queryKey 는 shared/constants/queryKeys.js 에서 중앙 관리
+export const QUERY_KEYS = {
+  member: (id) => ['member', id],
+  memberList: ['member', 'list'],
+};
+```
+
+## Redux — 클라이언트 전역 상태
+
+```js
+// ✅ features/auth/model/authSlice.js — 로그인 사용자
+// ✅ features/ui-preferences/model/uiPreferencesSlice.js — 테마, 사이드바
+
+// ❌ 서버 데이터를 Redux에 저장하지 않습니다
+// dispatch(setMemberList(response.data))  ← 금지
+```
+
+## Mutation (저장·수정·삭제)
+
+```js
+// ✅ features/.../model/ 에 useMutation 훅 작성
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+export function useSaveMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: memberApi.save,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memberList }),
+  });
+}
+```
+
+## 로컬 UI 상태
+
+```js
+// ✅ 다이얼로그 열림/닫힘은 page가 소유
+export default function OrderPage() {
+  const [open, setOpen] = useState(false);
+  return <MemberProfileDialog open={open} onClose={() => setOpen(false)} />;
+}
+```

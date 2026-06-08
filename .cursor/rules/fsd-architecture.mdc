@@ -1,0 +1,55 @@
+---
+description: FSD 레이어 간 import 방향 규칙
+alwaysApply: true
+---
+
+# FSD 아키텍처 규칙
+
+레이어 순서: `app → pages → widgets → features → entities → shared`
+위 방향(아래→위)으로 import하면 안 됩니다.
+
+## 허용되는 import 방향
+
+```
+app      → pages, widgets, features, entities, shared
+pages    → widgets, features, entities, shared
+widgets  → features, entities, shared
+features → entities, shared
+entities → shared
+shared   → shared 내부만
+```
+
+## 금지 예시
+
+```js
+// ❌ shared → pages import 금지
+// src/shared/ui/Button.jsx
+import { LoginPage } from '@/pages/login/ui/LoginPage';
+
+// ❌ features/A → features/B 직접 import 금지
+// src/features/auth/model/useAuth.js
+import { useSelectMember } from '@/features/member-select/model/useSelectMember';
+
+// ❌ pages/A → pages/B import 금지
+import { LoginPage } from '@/pages/login/ui/LoginPage';
+```
+
+## 올바른 예시
+
+```js
+// ✅ pages → features → entities → shared 순서
+// src/pages/order/ui/OrderPage.jsx
+import { MemberProfileDialog } from '@/widgets/member-profile-dialog/ui/MemberProfileDialog';
+import { useSelectMember } from '@/features/member-select/model/useSelectMember';
+import { Button } from '@/shared/ui/button/Button';
+```
+
+## 세그먼트 구조
+
+각 슬라이스(slice) 안은 역할에 따라 세 가지로 나눕니다.
+
+- `ui/` — 화면에 보이는 컴포넌트
+- `model/` — 상태, 훅, 비즈니스 로직
+- `api/` — HTTP 호출 함수만
+
+파일을 새로 만들 때 반드시 이 세그먼트 중 하나에 위치시킵니다.

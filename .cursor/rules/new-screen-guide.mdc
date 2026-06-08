@@ -1,0 +1,62 @@
+---
+description: 새 화면(페이지) 추가 절차
+alwaysApply: true
+---
+
+# 새 화면 추가 절차
+
+## 1단계 — 페이지 파일 생성
+
+```
+src/pages/<이름>/ui/<이름>Page.jsx
+```
+
+```jsx
+// src/pages/order/ui/OrderPage.jsx
+export default function OrderPage() {
+  return <main>주문 페이지</main>;
+}
+```
+
+## 2단계 — lazyPages.js 등록
+
+```js
+// src/app/router/lazyPages.js
+export const OrderPage = lazy(() => import('@/pages/order/ui/OrderPage'));
+```
+
+## 3단계 — routes.jsx 경로 등록
+
+```js
+// src/app/router/routes.jsx
+{ path: '/order', element: <Lazy Page={OrderPage} /> },
+```
+
+## 4단계 — 기능 조립
+
+페이지는 레고 조립 역할만 합니다. 비즈니스 로직은 아래에 위임합니다.
+
+```
+무거운 조회 로직 → features/<이름>/model/use<이름>Query.js
+무거운 저장 로직 → features/<이름>/model/use<이름>Mutation.js
+공통 API 호출   → entities/<도메인>/api/<도메인>Api.js
+재사용 UI 조각  → widgets/<이름>/ui/<이름>.jsx
+```
+
+## 파일 하나당 역할 한 가지
+
+```
+OrderPage.jsx       → 레이아웃 조립만
+useOrderQuery.js    → React Query 조회만
+useOrderMutation.js → useMutation 저장·수정만
+orderApi.js         → axios/fetch 호출만
+```
+
+## 조회·저장 함수 네이밍
+
+```js
+// 화면 내 핸들러 함수
+function searchLogic1() { /* 첫 번째 조회 */ }
+function searchLogic2() { /* 두 번째 조회 */ }
+function saveLogic1()   { /* 첫 번째 저장 */ }
+```

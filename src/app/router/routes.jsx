@@ -1,11 +1,15 @@
 import React from 'react';
 
+import { ErrorBoundary } from '@/shared/ui/error-boundary/ErrorBoundary';
+
 import { HomePage, LoginPage, SampleListPage } from './lazyPages';
 
 const Lazy = ({ Page }) => (
-  <React.Suspense fallback={<div>Loading...</div>}>
-    <Page />
-  </React.Suspense>
+  <ErrorBoundary>
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <Page />
+    </React.Suspense>
+  </ErrorBoundary>
 );
 
 export const routes = [
