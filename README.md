@@ -16,17 +16,18 @@
 2. [새 프로젝트 시작하기](#새-프로젝트-시작하기)
 3. [기술 스택 로드맵](#기술-스택-로드맵)
 4. [상태 관리: Redux vs React Query](#상태-관리-redux-vs-react-query)
-5. [팀 코딩 규칙 (화면 / 기능 / 로직 이름)](#팀-코딩-규칙-화면--기능--로직-이름)
+5. [코딩 규칙 (레이어 역할)](#코딩-규칙-레이어-역할)
 6. [FSD란? — 처음 보는 분을 위한 상세 설명](#fsd란--처음-보는-분을-위한-상세-설명)
 7. [폴더 구조 전체 (JavaScript)](#폴더-구조-전체-javascript)
 8. [파일 확장자 규칙](#파일-확장자-규칙)
 9. [경로 별칭 (Path Alias)](#경로-별칭-path-alias)
 10. [import 규칙 — 폴더 간 연결 규칙](#import-규칙--폴더-간-연결-규칙)
 11. [새 화면 추가하는 방법](#새-화면-추가하는-방법)
-12. [스타일 · 아이콘 · 색상 · 폰트](#스타일--아이콘--색상--폰트)
-13. [개발 규칙 (ESLint · Cursor)](#개발-규칙-eslint--cursor)
-14. [실행 명령어](#실행-명령어)
-15. [참고 링크](#참고-링크)
+12. [예시: 여러 페이지에서 쓰는 회원 정보 팝업](#예시-여러-페이지에서-쓰는-회원-정보-팝업)
+13. [스타일 · 아이콘 · 색상 · 폰트](#스타일--아이콘--색상--폰트)
+14. [개발 규칙 (ESLint · Cursor)](#개발-규칙-eslint--cursor)
+15. [실행 명령어](#실행-명령어)
+16. [참고 링크](#참고-링크)
 
 ---
 
@@ -124,21 +125,20 @@
 
 ---
 
-## 팀 코딩 규칙 (화면 / 기능 / 로직 이름)
+## 코딩 규칙 (레이어 역할)
 
-이 템플릿은 **화면단**과 **기능단**을 나누고, 함수 이름 규칙을 통일합니다.
+FSD 레이어별로 파일을 나누고, **React에서 흔히 쓰는 패턴**(훅 + API)을 따릅니다.
 
-| 구분           | 의미                         | 폴더 위치                | 파일 예시                         |
-| -------------- | ---------------------------- | ------------------------ | --------------------------------- |
-| **화면**       | 사용자가 보는 한 페이지 전체 | `pages/<이름>/ui/`       | `SampleListPage.jsx`              |
-| **기능(로직)** | 조회·저장·버튼 처리 등 동작  | `features/<이름>/model/` | `SampleListF.js`                  |
-| **조회 로직**  | 목록/상세 검색               | `*F.js` 안               | `SearchLogic1`, `SearchLogic2`, … |
-| **저장 로직**  | 등록·수정·삭제               | `*F.js` 안               | `SaveLogic1`, `SaveLogic2`, …     |
-
-**함수 이름**: 파스칼 케이스 (예: `SearchLogic1`, `SaveLogic1`)
+| 구분        | 의미                       | 폴더 위치                | 파일 예시                    |
+| ----------- | -------------------------- | ------------------------ | ---------------------------- |
+| **화면**    | URL 하나에 대응하는 페이지 | `pages/<이름>/ui/`       | `OrderPage.jsx`              |
+| **위젯**    | 여러 기능을 묶은 큰 UI     | `widgets/<이름>/ui/`     | `MemberProfileDialog.jsx`    |
+| **UI**      | 표·폼·버튼 등 기능 UI      | `features/<이름>/ui/`    | `SelectMemberButton.jsx`     |
+| **로직·훅** | 상태, React Query, Redux   | `features/<이름>/model/` | `useSelectMember.js`         |
+| **API**     | HTTP 호출만                | `entities/<이름>/api/`   | `memberApi.js`               |
 
 **흐름 (한 줄)**  
-브라우저 주소 → **페이지(화면)** 가 레이아웃을 붙이고 → **기능(표·폼)** 을 보여 주며 → **기능단 JS** 가 조회/저장을 실행합니다.
+브라우저 주소 → **page** 가 레이아웃·기능 UI를 조립 → **model 훅** 이 api를 호출해 조회·저장을 처리합니다.
 
 ---
 
@@ -173,9 +173,9 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 | 층 이름      | 비유                       | 하는 일                                                     |
 | ------------ | -------------------------- | ----------------------------------------------------------- |
 | **app**      | 건물 로비·전기·엘리베이터  | 앱 전체 설정: 라우터, Redux, React Query Provider           |
-| **pages**    | “로그인 층”, “목록 층”     | **주소(URL) 하나 = 화면 하나**                              |
+| **pages**    | “로그인 층”, “주문 층”     | **주소(URL) 하나 = 화면 하나**                              |
 | **widgets**  | 로비에 있는 큰 안내 데스크 | 여러 기능을 **묶은 큰 UI** (전체 레이아웃, 사이드바+헤더)   |
-| **features** | 각 부서 창구               | **사용자 행동** 단위 (로그인하기, 목록 조회하기)            |
+| **features** | 각 부서 창구               | **사용자 행동** 단위 (로그인하기, 회원 선택하기)            |
 | **entities** | 회사 공통 명함·직원 카드   | **업무 데이터 단위** (사용자, 상품) — 여러 창구가 공유      |
 | **shared**   | 공용 복사기·도장·A4용지    | **어떤 프로젝트에나 쓸 수 있는** 버튼, 색상, API 클라이언트 |
 
@@ -190,13 +190,13 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 예: `features` 층 안에
 
 - `auth` 서랍 → 로그인 관련만
-- `sample-list` 서랍 → 샘플 목록 관련만
+- `member-select` 서랍 → 회원 선택 관련만
 
 이 **서랍 하나 = 슬라이스** 입니다.  
-이름은 보통 **영문 kebab-case** (`sample-list`, `ui-preferences`).
+이름은 보통 **영문 kebab-case** (`member-select`, `ui-preferences`).
 
 **같은 층의 서랍끼리는 직접 물건을 빌려오지 않습니다.**  
-로그인 서랍이 목록 서랍 파일을 직접 import 하면 안 됩니다. 공통이 필요하면 **아래층 `entities`나 `shared`** 로 내립니다.
+로그인 서랍이 회원 선택 서랍 파일을 직접 import 하면 안 됩니다. 공통이 필요하면 **아래층 `entities`나 `shared`** 로 내립니다.
 
 ---
 
@@ -204,47 +204,50 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 
 각 서랍 안은 다시 **역할별 칸**으로 나눕니다.
 
-| 칸 이름   | 들어가는 것                        | 비유                        |
-| --------- | ---------------------------------- | --------------------------- |
-| **ui**    | 화면에 보이는 버튼·표·폼           | 창구 앞에 보이는 키오스크   |
-| **model** | 상태, 훅, `SearchLogic1` 같은 로직 | 창구 뒤에서 일하는 직원     |
-| **api**   | 서버 주소 호출, fetch/axios        | 창구와 본사를 연결하는 전화 |
-| **lib**   | (선택) 이 기능만 쓰는 계산·포맷    | 창구 전용 계산기            |
+| 칸 이름   | 들어가는 것                     | 비유                        |
+| --------- | ------------------------------- | --------------------------- |
+| **ui**    | 화면에 보이는 버튼·표·폼        | 창구 앞에 보이는 키오스크   |
+| **model** | 상태, 훅, 비즈니스 로직         | 창구 뒤에서 일하는 직원     |
+| **api**   | 서버 주소 호출, fetch/axios     | 창구와 본사를 연결하는 전화 |
+| **lib**   | (선택) 이 기능만 쓰는 계산·포맷 | 창구 전용 계산기            |
 
 **팀 규칙과 연결**
 
-- 화면 파일 (`SampleListPage.jsx`) → 보통 **`pages/.../ui`**
-- 기능단 (`SampleListF.js`, `SearchLogic1`) → **`features/.../model`**
+- 화면 파일 (`OrderPage.jsx`) → **`pages/.../ui`**
+- 팝업 조립 (`MemberProfileDialog.jsx`) → **`widgets/.../ui`**
+- 선택 훅 (`useSelectMember.js`) → **`features/.../model`**
+- 회원 API (`memberApi.js`) → **`entities/.../api`**
 
 ---
 
-### 데이터가 흐르는 순서 (로그인 후 목록 보기)
+### 데이터가 흐르는 순서 (주문 화면에서 회원 팝업 열기)
 
-아래는 “사용자가 `/sample-list` 주소로 들어왔을 때”를 **위에서 아래로**만 읽으면 됩니다.
+아래는 “사용자가 주문 화면에서 **회원 정보 팝업**을 열었을 때”를 **위에서 아래로**만 읽으면 됩니다.
 
 ```
 1. app (로비)
-   → “어떤 주소면 어떤 페이지를 보여 줄지” 라우터가 결정
+   → 라우터가 OrderPage를 렌더
 
-2. pages/sample-list (목록 층)
-   → SampleListPage.jsx: “이 화면의 큰 틀”만 조립
+2. pages/order (주문 층)
+   → OrderPage.jsx: open/onClose 상태 + MemberProfileDialog 조립
 
-3. widgets/layout (레이아웃 데스크)
-   → MainLayout: 사이드바 + 위쪽 바 + 가운데에 내용 넣는 틀
+3. widgets/member-profile-dialog (팝업 조립)
+   → MemberProfileDialog: Dialog + MemberCard + 선택 버튼
 
-4. features/sample-list (목록 창구)
-   → ui: 표, 버튼
-   → model: SearchLogic1으로 조회, 버튼 클릭 처리
-   → api: 실제 HTTP 요청
+4. features/member-select (회원 선택 창구)
+   → ui: SelectMemberButton
+   → model: useSelectMember — 선택 시 onSelect 콜백
 
-5. entities/sample (공통 명함) — 필요할 때만
-   → “샘플 한 건”이 어떤 필드를 갖는지, 여러 기능이 같이 씀
+5. entities/member (회원 명함)
+   → api: memberApi — HTTP
+   → model: useMemberQuery — 회원 상세 조회
+   → ui: MemberCard — 회원 정보 표시
 
 6. shared (공용 창고)
-   → Button, Input, API 기본 주소, 색상·아이콘 설정
+   → Dialog, Button, API client, 색상·아이콘 설정
 ```
 
-**React Query**는 보통 `features/.../model`의 훅에서 “서버에서 목록 가져오기”에 쓰고,  
+**React Query**는 `entities/member/model` 또는 `features/.../model` 훅에서 회원 조회에 쓰고,  
 **Redux**는 `features/auth`, `features/ui-preferences`처럼 “로그인 사용자·테마”에 씁니다.
 
 ---
@@ -283,7 +286,7 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 #### `features` — 사용자 시나리오
 
 - “로그인한다”
-- “샘플 목록을 조회한다”
+- “회원을 선택한다” (`member-select`)
 - “사이드바를 연다/닫는다” (UI 전역이면 Redux slice도 여기 `model`)
 
 **가장 자주 코드를 추가하는 층**입니다.
@@ -292,7 +295,7 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 
 #### `entities` — 업무 도메인
 
-- `user`, `product`, `sample` 처럼 **비즈니스 객체** 단위
+- `member`, `user`, `product` 처럼 **비즈니스 객체** 단위
 - 처음에는 `features` 안에 두었다가, **두 번째 기능에서도 같은 user를 쓰면** `entities/user`로 올립니다.
 
 ---
@@ -319,18 +322,15 @@ FSD는 건물을 **층(레이어)** 으로 나눕니다.
 
 ---
 
-### `index.js` — 서랍 문에 붙이는 “메뉴판”
+### import 경로
 
-각 슬라이스 폴더 루트의 `index.js`는 **바깥에 공개할 것만** export 합니다.
+슬라이스 내부 파일은 **경로를 직접** import 합니다.
 
 ```js
-// features/sample-list/index.js
-export { SampleListTable } from './ui/SampleListTable.jsx';
-export { useSampleListPage, SearchLogic1 } from './model/SampleListF.js';
+import { MemberProfileDialog } from '@/widgets/member-profile-dialog/ui/MemberProfileDialog';
+import { useMemberQuery } from '@/entities/member/model/useMemberQuery';
+import { useSelectMember } from '@/features/member-select/model/useSelectMember';
 ```
-
-다른 폴더에서는 **내부 파일 경로를 직접 쓰지 않고** `@/features/sample-list`처럼 **메뉴판만** import 합니다.  
-그래야 나중에 파일 이름을 바꿔도 바깥 코드가 덜 깨집니다.
 
 ---
 
@@ -344,8 +344,8 @@ flowchart TB
     widgets[widgets - 레이아웃 큰 블록]
   end
   subgraph middle [중간 - 기능·도메인]
-    features[features - 로그인 목록 조회 등]
-    entities[entities - User Product 등]
+    features[features - 로그인 회원 선택 등]
+    entities[entities - Member User 등]
   end
   subgraph lower [아래 - 공통]
     shared[shared - UI 색상 API 유틸]
@@ -369,8 +369,6 @@ flowchart TB
 ### 더 읽을 거리 (한국어·영문)
 
 - [Feature-Sliced Design 공식 — Overview](https://feature-sliced.design/docs/get-started/overview)
-- [FSD 개념 정리 (블로그)](https://wonderfulwonder.tistory.com/110)
-- [React 폴더 구조 관련 글](https://joong-sunny.github.io/react/react7/)
 
 ---
 
@@ -398,67 +396,62 @@ src/
 │   └── styles/
 │       └── globals.css
 │
-├── pages/                            # URL 1개 = 화면 1개 (화면단)
+├── pages/                            # URL 1개 = 화면 1개
 │   ├── home/
-│   │   ├── ui/
-│   │   │   └── HomePage.jsx
-│   │   └── index.js
+│   │   └── ui/
+│   │       └── HomePage.jsx
 │   ├── login/
-│   │   ├── ui/
-│   │   │   └── LoginPage.jsx
-│   │   └── index.js
-│   └── sample-list/
-│       ├── ui/
-│       │   └── SampleListPage.jsx
-│       └── index.js
+│   │   └── ui/
+│   │       └── LoginPage.jsx
+│   └── order/
+│       └── ui/
+│           └── OrderPage.jsx         # MemberProfileDialog 사용 예시
 │
 ├── widgets/                          # 큰 UI 조각 (레이아웃 등)
 │   ├── layout/
-│   │   ├── ui/
-│   │   │   ├── MainLayout.jsx
-│   │   │   └── AuthLayout.jsx
-│   │   └── index.js
-│   └── sidebar/
-│       ├── ui/
-│       │   └── AppSidebar.jsx
-│       └── index.js
+│   │   └── ui/
+│   │       ├── MainLayout.jsx
+│   │       └── AuthLayout.jsx
+│   ├── sidebar/
+│   │   └── ui/
+│   │       └── AppSidebar.jsx
+│   └── member-profile-dialog/        # 회원 정보 팝업 조립
+│       └── ui/
+│           └── MemberProfileDialog.jsx
 │
-├── features/                         # 기능·시나리오 (기능단)
+├── features/                         # 기능·시나리오
 │   ├── auth/
 │   │   ├── api/
 │   │   │   └── authApi.js
 │   │   ├── model/
 │   │   │   ├── authSlice.js          # Redux: 로그인 사용자
 │   │   │   ├── useAuth.js
-│   │   │   └── LoginF.js             # SaveLogic1 등
-│   │   ├── ui/
-│   │   │   └── LoginForm.jsx
-│   │   └── index.js
-│   ├── sample-list/
-│   │   ├── api/
-│   │   │   └── sampleListApi.js
+│   │   │   └── useLogin.js           # 로그인 처리 훅
+│   │   └── ui/
+│   │       └── LoginForm.jsx
+│   ├── member-select/                # 회원 선택 행동
 │   │   ├── model/
-│   │   │   ├── useSampleListQuery.js
-│   │   │   └── SampleListF.js        # SearchLogic1, SaveLogic1
-│   │   ├── ui/
-│   │   │   └── SampleListTable.jsx
-│   │   └── index.js
+│   │   │   └── useSelectMember.js
+│   │   └── ui/
+│   │       └── SelectMemberButton.jsx
 │   └── ui-preferences/
-│       ├── model/
-│       │   └── uiPreferencesSlice.js # 테마, 사이드바
-│       └── index.js
+│       └── model/
+│           └── uiPreferencesSlice.js   # 테마, 사이드바
 │
 ├── entities/                         # 공유 도메인 (필요 시 추가)
+│   ├── member/                       # 회원 도메인
+│   │   ├── api/
+│   │   │   └── memberApi.js
+│   │   ├── model/
+│   │   │   ├── memberTypes.js
+│   │   │   └── useMemberQuery.js
+│   │   └── ui/
+│   │       └── MemberCard.jsx
 │   ├── user/
 │   │   ├── api/
 │   │   │   └── userApi.js
-│   │   ├── model/
-│   │   │   └── userTypes.js          # (선택) JSDoc typedef
-│   │   └── index.js
-│   └── sample/
-│       ├── model/
-│       │   └── sampleTypes.js
-│       └── index.js
+│   │   └── model/
+│   │       └── userTypes.js          # (선택) JSDoc typedef
 │
 ├── shared/                           # 전역 공통
 │   ├── api/
@@ -475,8 +468,7 @@ src/
 │   │   ├── textarea/
 │   │   ├── select/
 │   │   ├── dialog/
-│   │   ├── bottom-sheet/
-│   │   └── index.js
+│   │   └── bottom-sheet/
 │   ├── lib/
 │   │   ├── cn.js
 │   │   └── formatDate.js
@@ -504,12 +496,12 @@ src/
 
 ## 파일 확장자 규칙
 
-| 종류                           | 확장자                   | 예                               |
-| ------------------------------ | ------------------------ | -------------------------------- |
-| React 화면·컴포넌트 (JSX 있음) | `.jsx`                   | `HomePage.jsx`, `Button.jsx`     |
-| 로직·API·slice·설정            | `.js`                    | `SampleListF.js`, `authSlice.js` |
-| 전역 스타일                    | `.css`                   | `globals.css`                    |
-| 테스트                         | `.test.js` / `.test.jsx` | `Button.test.jsx`                |
+| 종류                           | 확장자                   | 예                                      |
+| ------------------------------ | ------------------------ | --------------------------------------- |
+| React 화면·컴포넌트 (JSX 있음) | `.jsx`                   | `HomePage.jsx`, `Button.jsx`            |
+| 로직·API·slice·설정            | `.js`                    | `useMemberQuery.js`, `authSlice.js`     |
+| 전역 스타일                    | `.css`                   | `globals.css`                           |
+| 테스트                         | `.test.js` / `.test.jsx` | `Button.test.jsx`                       |
 
 ---
 
@@ -539,8 +531,8 @@ src/
 사용 예:
 
 ```js
-import { Button } from '@/shared/ui';
-import { useSampleListPage } from '@/features/sample-list';
+import { Button } from '@/shared/ui/button/Button';
+import { MemberProfileDialog } from '@/widgets/member-profile-dialog/ui/MemberProfileDialog';
 ```
 
 ---
@@ -558,7 +550,7 @@ import { useSampleListPage } from '@/features/sample-list';
 
 **금지**
 
-- `features/로그인` → `features/목록` 직접 import
+- `features/로그인` → `features/회원선택` 직접 import
 - `shared` → `pages` / `features` import
 - `pages/A` → `pages/B` import (공통은 `widgets` / `features` / `shared`로)
 
@@ -566,29 +558,175 @@ import { useSampleListPage } from '@/features/sample-list';
 
 ## 새 화면 추가하는 방법
 
-예: “샘플 목록” 화면 `/sample-list` 추가
+URL에 대응하는 **page**를 추가하고, 필요한 **widgets** · **features** · **entities**를 조립합니다.
+
+예: 주문 화면(`/order`)에서 **회원 정보 팝업**(`member-profile-dialog`)을 쓰는 경우
 
 ### 1단계 — 페이지(화면) 만들기
 
-1. `src/pages/sample-list/ui/SampleListPage.jsx` 생성
-2. `src/pages/sample-list/index.js`에서 export
-3. `app/router/routes.jsx`에 경로 등록
-4. 필요 시 `app/router/lazyPages.js`에 `React.lazy` 등록
+1. `src/pages/order/ui/OrderPage.jsx` 생성
+2. `app/router/routes.jsx`에 경로 등록
+3. 필요 시 `app/router/lazyPages.js`에 `React.lazy` 등록
 
-### 2단계 — 기능(로직·UI) 만들기
+### 2단계 — page에서 팝업 조립
 
-1. `src/features/sample-list/model/SampleListF.js` — `SearchLogic1`, `SaveLogic1`
-2. `src/features/sample-list/api/sampleListApi.js` — HTTP
-3. `src/features/sample-list/ui/SampleListTable.jsx` — 표/버튼
-4. `src/features/sample-list/index.js` — public export
+1. `open` / `onClose` / `onSelect` 상태는 **page**에서 `useState`로 관리
+2. `widgets/member-profile-dialog/ui/MemberProfileDialog` import
+3. 레이아웃이 필요하면 `widgets/layout`의 `MainLayout`로 감싸기
 
-### 3단계 — 페이지에서 조립
+### 3단계 — 팝업 내부 구성 (최초 1회)
 
-`SampleListPage.jsx`에서는 레이아웃(`widgets/layout`) + 기능 UI + `useSampleListPage()` 훅만 연결합니다.
+1. `entities/member` — `memberApi`, `useMemberQuery`, `MemberCard`
+2. `features/member-select` — `useSelectMember`, `SelectMemberButton`
+3. `widgets/member-profile-dialog` — 위 조각을 조립한 `MemberProfileDialog`
 
-### 4단계 — 같은 데이터를 다른 화면에서도 쓸 때
+자세한 레이어 분리·폴더 구조·코드 예시는 [예시: 여러 페이지에서 쓰는 회원 정보 팝업](#예시-여러-페이지에서-쓰는-회원-정보-팝업)을 참고하세요.
 
-“사용자(user)” 정보가 로그인·마이페이지·관리자에서 모두 필요 → `entities/user`로 올립니다.
+---
+
+## 예시: 여러 페이지에서 쓰는 회원 정보 팝업
+
+### 시나리오
+
+`member` 테이블에 회원 정보가 있고, **여러 페이지에서 공통으로 쓰는 “회원 정보 팝업”** 을 만든다.
+
+팝업에서 필요한 것:
+
+| 동작     | 설명                                |
+| -------- | ----------------------------------- |
+| **조회** | 회원 ID(또는 검색 조건)로 정보 표시 |
+| **닫기** | 팝업 닫기                           |
+| **선택** | 회원을 고르고 부모 화면에 전달      |
+
+한 페이지에만 쓰는 UI면 `features`만으로도 충분합니다. **여러 page에서 재사용**하고, entity 표현 + 선택 행동 + 팝업 조립을 나누려면 아래처럼 **entities → features → widgets → pages** 순으로 쌓습니다.
+
+### 레이어별 역할
+
+| 레이어       | 슬라이스                | 역할                                                  |
+| ------------ | ----------------------- | ----------------------------------------------------- |
+| **entities** | `member`                | 회원 **도메인** — 타입, API, 카드 UI, (공통) 조회 훅  |
+| **features** | `member-select`         | 회원을 **선택**하는 사용자 행동 — 선택 버튼·핸들러 훅 |
+| **widgets**  | `member-profile-dialog` | Dialog + 카드 + 선택 UI를 **조립한 완성 팝업**        |
+| **pages**    | (각 화면)               | `open` / `onClose` / `onSelect` 로 팝업 **제어·조립** |
+| **shared**   | `ui/dialog`             | 비즈니스 무관한 **모달 껍데기**                       |
+
+> `entities/user`와 회원 도메인이 같다면 `member` 대신 `user` 슬라이스를 확장해도 됩니다.
+
+### 폴더 구조 예시
+
+```text
+entities/member/
+  api/
+    memberApi.js              # getById, search 등 HTTP
+  model/
+    memberTypes.js            # Member 필드 정의 (JSDoc typedef)
+    useMemberQuery.js         # id로 회원 상세 조회 (React Query)
+  ui/
+    MemberCard.jsx            # 사진·이름·이메일만 표시 (열기/닫기/선택 로직 없음)
+
+features/member-select/
+  ui/
+    SelectMemberButton.jsx    # “선택” 버튼 (또는 행 클릭 UI)
+  model/
+    useSelectMember.js        # 선택 시 부모 onSelect 콜백 호출
+
+widgets/member-profile-dialog/
+  ui/
+    MemberProfileDialog.jsx   # 팝업 전체 조립
+
+shared/ui/dialog/             # 범용 Dialog (overlay, ESC 등)
+```
+
+### 이벤트·상태를 어디에 둘까
+
+| 항목         | 위치                                              |
+| ------------ | ------------------------------------------------- |
+| **조회 API** | `entities/member/api/memberApi.js`                |
+| **조회 훅**  | `entities/member/model/useMemberQuery.js`         |
+| **닫기**     | **page**의 `isOpen` + `onClose` (controlled)      |
+| **선택**     | `features/member-select/model/useSelectMember.js` |
+| **팝업 UI**  | `widgets/member-profile-dialog/ui`                |
+
+팝업 **열림/닫힘은 page가 소유**하는 편이 재사용에 유리합니다. widget 안에서만 `isOpen`을 관리하면 page마다 연동이 어렵습니다.
+
+### import / 조립 흐름
+
+```text
+pages/order/ui/OrderPage.jsx
+  ├─ isOpen, setOpen (useState)
+  ├─ widgets/member-profile-dialog → MemberProfileDialog
+  │     ├─ shared/ui/dialog
+  │     ├─ entities/member → useMemberQuery, MemberCard
+  │     └─ features/member-select → SelectMemberButton, useSelectMember
+  └─ (선택) “회원 선택” 버튼으로 setOpen(true)
+```
+
+**주의 (import 규칙)**
+
+- `widgets` → `features`, `entities`, `shared` ✅
+- `features/member-select` → `widgets/member-profile-dialog` ❌ (feature가 widget을 import하면 안 됨)
+- 팝업을 **여는 쪽은 page** — feature 버튼은 `onClick={() => setOpen(true)}` 만 넘기고, dialog는 page가 렌더
+
+### 코드 스케치
+
+```jsx
+// pages/order/ui/OrderPage.jsx
+import { useState } from 'react';
+
+import { MemberProfileDialog } from '@/widgets/member-profile-dialog/ui/MemberProfileDialog';
+
+export default function OrderPage() {
+  const [open, setOpen] = useState(false);
+  const [memberId, setMemberId] = useState(null);
+
+  const handleSelect = (member) => {
+    setMemberId(member.id);
+    setOpen(false);
+  };
+
+  return (
+    <main>
+      <button type="button" onClick={() => setOpen(true)}>
+        회원 선택
+      </button>
+      <MemberProfileDialog
+        open={open}
+        memberId={memberId}
+        onClose={() => setOpen(false)}
+        onSelect={handleSelect}
+      />
+    </main>
+  );
+}
+```
+
+```jsx
+// widgets/member-profile-dialog/ui/MemberProfileDialog.jsx
+import { Dialog } from '@/shared/ui/dialog/Dialog';
+import { MemberCard } from '@/entities/member/ui/MemberCard';
+import { useMemberQuery } from '@/entities/member/model/useMemberQuery';
+import { SelectMemberButton } from '@/features/member-select/ui/SelectMemberButton';
+
+export function MemberProfileDialog({ open, memberId, onClose, onSelect }) {
+  const { data: member, isLoading } = useMemberQuery(memberId, { enabled: open && !!memberId });
+
+  return (
+    <Dialog open={open} onClose={onClose}>
+      {isLoading ? <p>로딩 중…</p> : <MemberCard member={member} />}
+      <SelectMemberButton member={member} onSelect={() => onSelect(member)} />
+    </Dialog>
+  );
+}
+```
+
+### 요약
+
+| 조각                       | 레이어                          |
+| -------------------------- | ------------------------------- |
+| 회원 타입·API·카드·조회 훅 | `entities/member`               |
+| 선택 이벤트                | `features/member-select`        |
+| 팝업 조립                  | `widgets/member-profile-dialog` |
+| 열기/닫기 제어             | `pages/.../ui`                  |
 
 ---
 
@@ -607,11 +745,11 @@ import { useSampleListPage } from '@/features/sample-list';
 
 ## 개발 규칙 (ESLint · Cursor)
 
-| 도구                               | 목적                                                                           |
-| ---------------------------------- | ------------------------------------------------------------------------------ |
-| **ESLint**                         | 문법·import 규칙·실수 방지 — 설정 파일을 repo에 포함해 새 프로젝트에 복사      |
-| **Prettier**                       | 들여쓰기·따옴표 통일 (권장)                                                    |
-| **Cursor Rules** (`.cursor/rules`) | FSD 레이어, `SearchLogicN` / `SaveLogicN`, 화면·기능 분리, Query vs Redux 안내 |
+| 도구                               | 목적                                                                      |
+| ---------------------------------- | ------------------------------------------------------------------------- |
+| **ESLint**                         | 문법·import 규칙·실수 방지 — 설정 파일을 repo에 포함해 새 프로젝트에 복사 |
+| **Prettier**                       | 들여쓰기·따옴표 통일 (권장)                                               |
+| **Cursor Rules** (`.cursor/rules`) | FSD 레이어, ui/api/model 역할, Query vs Redux 안내                        |
 
 ---
 

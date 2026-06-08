@@ -1,3 +1,17 @@
+/**
+ * 프로젝트 색상 중앙 관리
+ *
+ * - tailwind.config.js → theme.extend.colors 에 spread되어 Tailwind 유틸리티 클래스로 사용
+ * - 컴포넌트 파일 안에서 색상 hex를 직접 하드코딩하지 않고 이 파일에서만 정의합니다.
+ *
+ * @example Tailwind 클래스로 사용
+ *   <div className="bg-blue-500 text-white" />
+ *   <p className="text-red-600" />
+ *
+ * @example JS에서 직접 참조
+ *   import colors from '@/shared/config/colors';
+ *   style={{ backgroundColor: colors.blue[500] }}
+ */
 const colors = {
   // ─── Colors ───────────────────────────────────────────────────────────────
   red: {
